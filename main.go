@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	idleThreshold     = 15 * time.Second  // 5 minutes
-	notifyThreshold   = 20 * time.Second  // 2 minutes
-	checkInterval     = 5 * time.Second // Check every 10 seconds
+	idleThreshold     = 10 * time.Minute  // 5 minutes
+	notifyThreshold   = 2 * time.Minute  // 2 minutes
+	checkInterval     = 1 * time.Second // Check every 10 seconds
 	notifyCommand     = "notify-send"
 	shutdownCommand   = "systemctl powerkill poweroff"
 	xprintidleCommand = "xprintidle"
