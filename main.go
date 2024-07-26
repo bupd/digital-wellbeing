@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	idleThreshold     = 10 * time.Minute  // 5 minutes
-	notifyThreshold   = 2 * time.Minute  // 2 minutes
-	checkInterval     = 1 * time.Second // Check every 10 seconds
+	idleThreshold     = 8 * time.Minute
+	notifyThreshold   = 2 * time.Minute
+	checkInterval     = 10 * time.Second // Check every 10 seconds
 	notifyCommand     = "notify-send"
 	shutdownCommand   = "systemctl powerkill poweroff"
 	xprintidleCommand = "xprintidle"
@@ -51,7 +51,7 @@ func main() {
 			time.Sleep(checkInterval)
 			continue
 		}
-    log.Println("idle time: ", idleTime)
+		log.Println("idle time: ", idleTime)
 
 		if idleTime >= idleThreshold {
 			if err := notifyUser(); err != nil {

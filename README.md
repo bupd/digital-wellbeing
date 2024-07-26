@@ -13,3 +13,5 @@ Linux app more than Digital Wellbeing found in Androids.
 - note volume % with time of connected devices
 - note power usage (if possible)
 - list how many times sounds are heard (i.e monitoring headphones with times)
+- sync with calendar and update the schedule and see if its work and you are not working add it as a missed task. 
+	- try adding it as a thing not productive (% of distracted from the work.)
