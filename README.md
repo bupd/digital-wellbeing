@@ -49,7 +49,7 @@ KeyPress event, serial 34, synthetic NO, window 0x5a00001,
 ```
 
 ## Digital wellbeing should have the following features:
-- taking all keystrokes with an avg delay.
+- taking all keystrokes & mouse clicks & mouse drags.
 - keystroke and mouse movement.
 	- this metric shows mouse vs keyboard graph. (% of keyboard used over mouse. etc)
 - should have open windows and tabs.
@@ -72,4 +72,4 @@ KeyPress event, serial 34, synthetic NO, window 0x5a00001,
 - xdotool getwindowfocus getwindowname -- get current focused window (every 5 secs).
 - check -> xdotool getwindowfocus getwindowclassname -- get the current class if it is kitty execute the above one to get the window name to determine youtube or any other thing
 - also if shown exec sessionizer or t -- means coding as per our thing. this should be configurable setting the rules that is teaching the app how to track it.
-- 
+-
