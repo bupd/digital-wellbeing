@@ -15,3 +15,11 @@ Linux app more than Digital Wellbeing found in Androids.
 - list how many times sounds are heard (i.e monitoring headphones with times)
 - sync with calendar and update the schedule and see if its work and you are not working add it as a missed task. 
 	- try adding it as a thing not productive (% of distracted from the work.)
+
+
+## commands that are useful
+- xev - monitoring the input and output devices such as mouse
+  - evtest - this is also an extension of xev with pretty logging events only specific events.
+
+- wmctrl -l -- to list all open windows
+- xdotool getwindowfocus getwindowname -- get current focused window (every 5 secs).
