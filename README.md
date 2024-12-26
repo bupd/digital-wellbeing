@@ -23,3 +23,6 @@ Linux app more than Digital Wellbeing found in Androids.
 
 - wmctrl -l -- to list all open windows
 - xdotool getwindowfocus getwindowname -- get current focused window (every 5 secs).
+- check -> xdotool getwindowfocus getwindowclassname -- get the current class if it is kitty execute the above one to get the window name to determine youtube or any other thing
+- also if shown exec sessionizer or t -- means coding as per our thing. this should be configurable setting the rules that is teaching the app how to track it.
+- 
