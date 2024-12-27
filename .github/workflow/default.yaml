@@ -1,0 +1,56 @@
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*.*.*"
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - 'assets/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Dagger Version
+        uses: sagikazarmark/dagger-version-action@v0.0.1
+
+      - name: Run Dagger golangci-lint
+        uses: dagger/dagger-for-github@v7
+        with:
+          version: ${{ steps.dagger_version.outputs.version }}
+          verb: call
+          args: lint-report export --path=golangci-lint-report.sarif
+
+      - name: Show Linting Output
+        run: |
+          # Print the result of golangci-lint to the console.
+          echo "Displaying golangci-lint results:"
+          cat golangci-lint-report.sarif
+
+  test-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Tests
+        uses: dagger/dagger-for-github@v7
+        with:
+          version: ${{ steps.dagger_version.outputs.version }}
+          verb: call
+          args: test
+
+      - name: Build Binary
+        uses: dagger/dagger-for-github@v7
+        with:
+          version: ${{ steps.dagger_version.outputs.version }}
+          verb: call
+          args: build-dev --platform linux/amd64 export --path=./harbor-dev
