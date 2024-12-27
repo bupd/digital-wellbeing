@@ -1,11 +1,8 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
 	"log"
 	"os/exec"
-	"os/user"
 	"strconv"
 	"strings"
 	"time"
@@ -49,62 +46,4 @@ func shutdownPC() error {
 		return err
 	}
 	return exec.Command("systemctl", "poweroff").Run()
-}
-
-func main() {
-  runSqlite()
-	notifyUser(fmt.Sprintf("Minutes AFK:%s , %s", idleThreshold, checkInterval))
-	for {
-		idleTime, err := getIdleTime()
-		if err != nil {
-			fmt.Println("Error getting idle time:", err)
-			time.Sleep(checkInterval)
-			continue
-		}
-		log.Println("idle time: ", idleTime)
-
-		if idleTime >= idleThreshold {
-			if err := notifyUser(""); err != nil {
-				fmt.Println("Error notifying user:", err)
-				time.Sleep(checkInterval)
-				continue
-			}
-			time.Sleep(notifyThreshold)
-
-			idleTime, err = getIdleTime()
-			if err != nil {
-				fmt.Println("Error getting idle time:", err)
-				time.Sleep(checkInterval)
-				continue
-			}
-
-			if idleTime >= idleThreshold+notifyThreshold {
-				if err := shutdownPC(); err != nil {
-					fmt.Println("Error shutting down PC:", err)
-				}
-			}
-		}
-
-		time.Sleep(checkInterval)
-	}
-}
-
-func runSqlite() error {
-	log.Println("running sqlite")
-	database, err := sql.Open("sqlite3", fmt.Sprintf("./kumar.db"))
-	if err != nil {
-		log.Printf("err getting db")
-		return err
-	}
-	defer database.Close()
-	statement, err := database.Prepare(
-		"CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT)",
-	)
-	if err != nil {
-		log.Printf("err getting db")
-		return err
-	}
-	statement.Exec()
-	log.Println("completed sqlite")
-	return nil
 }
