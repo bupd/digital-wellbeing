@@ -9,5 +9,5 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 }
 
 func Health(w http.ResponseWriter, r *http.Request) {
-	_, _ = w.Write([]byte("pong"))
+	_, _ = w.Write([]byte("healthy"))
 }
