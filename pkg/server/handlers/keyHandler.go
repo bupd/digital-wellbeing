@@ -43,3 +43,20 @@ func ListKeysPastHour(db *database.Queries) http.HandlerFunc {
 	}
 }
 
+func ListKeysPastDay(db *database.Queries) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		rows, err := db.ListKeysPressedLast24Hours(r.Context())
+		if err != nil {
+			log.Printf("error in listing Last Day keys in DB: %v", err)
+			err := &AppError{
+				Message: "Error: List Past Day Keys Failed",
+				Code:    http.StatusNotFound,
+			}
+			HandleAppError(w, err)
+			return
+		}
+
+		log.Printf("List Past Day Keys success, Length: %v, %v \n", len(rows), r.UserAgent())
+		WriteJSONResponse(w, http.StatusOK, rows)
+	}
+}
