@@ -73,3 +73,8 @@ KeyPress event, serial 34, synthetic NO, window 0x5a00001,
 - check -> xdotool getwindowfocus getwindowclassname -- get the current class if it is kitty execute the above one to get the window name to determine youtube or any other thing
 - also if shown exec sessionizer or t -- means coding as per our thing. this should be configurable setting the rules that is teaching the app how to track it.
 -
+
+# IDEAS
+- heatmap showing keys pressed over time
+- most active hours / peak typing hours
+- peak key ranking based on hour/day etc
