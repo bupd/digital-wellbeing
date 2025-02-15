@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"strconv"
@@ -21,9 +22,6 @@ type Server struct {
 	db        *sql.DB
 	dbQueries *database.Queries
 }
-
-//go:embed routes.go
-var ddl string
 
 var (
 	dbName   = os.Getenv("DB_DATABASE")
@@ -48,12 +46,9 @@ func NewServer() *http.Server {
 
 	db, err := sql.Open("sqlite", ":memory:")
 	if err != nil {
-		return err
-	}
-
-	// create tables
-	if _, err := db.ExecContext(ctx, ddl); err != nil {
-		return err
+		slog.Error("New server creation failed in connection to sqlite in memory DB")
+		slog.Error(fmt.Sprintf("Failed to open sqlite: %v", err))
+		return nil
 	}
 
 	dbQueries := database.New(db)
@@ -76,11 +71,11 @@ func NewServer() *http.Server {
 	return server
 }
 
-func InputsHook() {
-	chanHook := hook.Start()
-	defer hook.End()
-
-	for ev := range chanHook {
-		fmt.Printf("hook: %v\n", ev)
-	}
-}
+// func InputsHook() {
+// 	chanHook := hook.Start()
+// 	defer hook.End()
+//
+// 	for ev := range chanHook {
+// 		fmt.Printf("hook: %v\n", ev)
+// 	}
+// }
