@@ -229,3 +229,44 @@ func GetFKeyName(rawcode uint16) string {
 		return "Unknown: " + fmt.Sprintf("%v", rawcode)
 	}
 }
+
+// logic to map Function Keys Rawcode to Keyname
+func GetMiscKeyName(rawcode uint16) string {
+	switch rawcode {
+	case 65361:
+		return "LeftArrow"
+	case 65362:
+		return "UpArrow"
+	case 65363:
+		return "RightArrow"
+	case 65364:
+		return "DownArrow"
+	case 45:
+		return "-"
+	case 65505:
+		return "LeftShift"
+	case 65506:
+		return "RightShift"
+	case 65507:
+		return "LeftCtrl"
+	case 65508:
+		return "RightCtrl"
+	case 65383:
+		return "Options"
+	case 65513:
+		return "LAlt"
+	case 65514:
+		return "RAlt"
+	case 65515:
+		return "WIN"
+	case 65509:
+		return "CapsLock"
+	case 96:
+		return "`"
+	case 126:
+		return "~"
+	default:
+		return "Unknown: " + fmt.Sprintf("%v", rawcode)
+	}
+}
+
