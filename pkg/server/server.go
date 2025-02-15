@@ -17,7 +17,6 @@ import (
 	// hook "github.com/robotn/gohook"
 )
 
-// to-do: create working connection with the sqlite local database @~/.digital-wellbeing/data.db
 // to-do: user account connection with db
 // to-do: three tables(goal),
 // this first{keyboard, mouse}, then windows
