@@ -5,7 +5,6 @@
 package database
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -18,13 +17,8 @@ type Key struct {
 
 type Mouse struct {
 	ID        int64
-	Keyname   string
-	IsMoved   int64
-	IsScroll  int64
-	Distance  int64
-	Keycode   int64
-	X         sql.NullInt64
-	Y         sql.NullInt64
+	EventType string
+	Button    string
 	CreatedAt time.Time
 }
 
