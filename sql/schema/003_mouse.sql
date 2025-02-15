@@ -1,6 +1,6 @@
 -- +goose Up
 CREATE TABLE mouse (
-  id TEXT PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   keyname TEXT UNIQUE NOT NULL,
   is_moved INTEGER NOT NULL,
   is_scroll INTEGER NOT NULL,
