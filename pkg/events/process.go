@@ -36,6 +36,7 @@ func StartHookListener(db *database.Queries) {
 				if ev.Rawcode > 65469 && ev.Rawcode < 65482 {
 					keyname = keymap.GetFKeyName(ev.Rawcode)
 				}
+				keyname = keymap.GetMiscKeyName(ev.Rawcode)
 			}
 
 			param := database.AddKeyParams{
