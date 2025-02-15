@@ -14,6 +14,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.HandleFunc("/health", h.Health(s.db)).Methods("GET")
 	r.HandleFunc("/user", h.AddUser(s.dbQueries)).Methods("POST")
 	r.HandleFunc("/user", h.ListUsers(s.dbQueries)).Methods("GET")
+	r.HandleFunc("/user", h.DeleteUser(s.dbQueries)).Methods("DELETE")
 
 
 	return r
