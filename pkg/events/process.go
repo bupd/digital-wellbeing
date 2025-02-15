@@ -26,7 +26,7 @@ type Event struct {
 	Keychar int
 }
 
-// takes down all keymaps for keyboards
+// takes down all keymaps for keyboards and mouse
 func StartHookListener(db *database.Queries) {
 	// hook.Start() initializes the hook listener
 	chanHook := hook.Start()
