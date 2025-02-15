@@ -3,7 +3,7 @@ package keymap
 import "fmt"
 
 // logic to map Keychar to Keyname
-func GetKeyName(keychar rune) string {
+func GetKeyName(keychar uint16) string {
 	switch keychar {
 	case 32:
 		return "Space"
