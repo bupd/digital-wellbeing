@@ -14,6 +14,7 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/bupd/digital-wellbeing/internal/database"
+	"github.com/bupd/digital-wellbeing/pkg/server/events"
 	// hook "github.com/robotn/gohook"
 )
 
@@ -80,6 +81,11 @@ func NewServer() *http.Server {
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}
+
+
+  log.Println("Started hook listener listening foor the keys")
+  go events.StartHookListener(dbQueries)
+
 
 	return server
 }
