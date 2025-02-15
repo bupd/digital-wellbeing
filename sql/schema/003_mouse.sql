@@ -1,13 +1,8 @@
 -- +goose Up
 CREATE TABLE mouse (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  keyname TEXT UNIQUE NOT NULL,
-  is_moved INTEGER NOT NULL,
-  is_scroll INTEGER NOT NULL,
-  distance INTEGER NOT NULL,
-  keycode INTEGER NOT NULL,
-  x INTEGER,
-  y INTEGER,
+  event_type TEXT NOT NULL,
+  button TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
