@@ -24,5 +24,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	// keys event handler
 	r.HandleFunc("/mouse/all", h.ListAllKeys(s.dbQueries)).Methods("GET")
 	r.HandleFunc("/mouse/1hr", h.ListKeysPastHour(s.dbQueries)).Methods("GET")
+	r.HandleFunc("/mouse/1day", h.ListKeysPastDay(s.dbQueries)).Methods("GET")
+
 	return r
 }
