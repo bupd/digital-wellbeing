@@ -7,6 +7,10 @@ import (
 	"github.com/bupd/digital-wellbeing/internal/database"
 )
 
+type createUserParams struct {
+	Name string `json:"name"`
+}
+
 func AddUser(db *database.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req createUserParams

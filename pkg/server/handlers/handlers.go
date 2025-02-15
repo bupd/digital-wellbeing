@@ -8,10 +8,6 @@ import (
 	"net/http"
 )
 
-type createUserParams struct {
-	Name string `json:"name"`
-}
-
 func Ping(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write([]byte("pong"))
 }
