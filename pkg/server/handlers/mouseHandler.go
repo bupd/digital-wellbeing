@@ -24,3 +24,21 @@ func ListAllMouseEvents(db *database.Queries) http.HandlerFunc {
 		WriteJSONResponse(w, http.StatusOK, rows)
 	}
 }
+
+func ListMousePastHour(db *database.Queries) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		rows, err := db.ListMouseEventsLastHour(r.Context())
+		if err != nil {
+			log.Printf("error in listing Past hour mouse events in DB: %v", err)
+			err := &AppError{
+				Message: "Error: List Past Hour Mouse Events Failed",
+				Code:    http.StatusNotFound,
+			}
+			HandleAppError(w, err)
+			return
+		}
+
+		log.Printf("List past hour mouse events success, Length: %v, %v \n", len(rows), r.UserAgent())
+		WriteJSONResponse(w, http.StatusOK, rows)
+	}
+}
