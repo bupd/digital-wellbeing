@@ -27,7 +27,6 @@ import (
 // to-do: aggregated holds data for frontend and websites
 // to-do: cumulative holds all data more like a scrap of things
 
-
 type Server struct {
 	port      int
 	db        *sql.DB
@@ -54,8 +53,12 @@ func NewServer() *http.Server {
 	if err != nil {
 		log.Fatalf("PORT is not valid: %v", err)
 	}
+  home, err := os.UserHomeDir()
+  if err != nil {
+    log.Fatalf("unable to get user home directory: %v", err)
+  }
 
-	db, err := sql.Open("sqlite", "~/.digital-wellbeing/data.db")
+	db, err := sql.Open("sqlite", home+"/.digital-wellbeing/data.db")
 	if err != nil {
 		slog.Error("New server creation failed in connection to sqlite in memory DB")
 		slog.Error(fmt.Sprintf("Failed to open sqlite: %v", err))
