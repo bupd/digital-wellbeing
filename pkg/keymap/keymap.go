@@ -195,3 +195,37 @@ func GetKeyName(keychar rune) string {
 		return "Unknown: " + fmt.Sprintf("%v", keychar)
 	}
 }
+
+// logic to map Function Keys Rawcode to Keyname
+func GetFKeyName(rawcode uint16) string {
+	// Rawcode: 65470 F1
+	// Rawcode: 65481 F12
+	switch rawcode {
+	case 65470:
+		return "F1"
+	case 65471:
+		return "F2"
+	case 65472:
+		return "F3"
+	case 65473:
+		return "F4"
+	case 65474:
+		return "F5"
+	case 65475:
+		return "F6"
+	case 65476:
+		return "F7"
+	case 65477:
+		return "F8"
+	case 65478:
+		return "F9"
+	case 65479:
+		return "F10"
+	case 65480:
+		return "F11"
+	case 65481:
+		return "F12"
+	default:
+		return "Unknown: " + fmt.Sprintf("%v", rawcode)
+	}
+}
