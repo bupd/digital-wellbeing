@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/bupd/digital-wellbeing/pkg/server"
+  _ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
