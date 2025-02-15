@@ -1,5 +1,4 @@
 -- +goose Up
-
 CREATE TABLE keys (
   id TEXT PRIMARY KEY,
   keyname TEXT UNIQUE NOT NULL,
