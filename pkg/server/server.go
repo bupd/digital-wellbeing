@@ -14,7 +14,7 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/bupd/digital-wellbeing/internal/database"
-	"github.com/bupd/digital-wellbeing/pkg/server/events"
+	"github.com/bupd/digital-wellbeing/pkg/events"
 	// hook "github.com/robotn/gohook"
 )
 
