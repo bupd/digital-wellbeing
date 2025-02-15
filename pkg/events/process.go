@@ -11,7 +11,12 @@ import (
 	hook "github.com/robotn/gohook"
 )
 
-const KeyDown = 3
+const (
+	KeyDown    = 3
+	MouseDown  = 8
+	MouseDrag  = 10
+	MouseWheel = 11
+)
 
 type rune = int32
 
