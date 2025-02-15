@@ -13,6 +13,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.HandleFunc("/ping", h.Ping).Methods("GET")
 	r.HandleFunc("/health", h.Health(s.db)).Methods("GET")
 	r.HandleFunc("/user", h.AddUser(s.dbQueries)).Methods("POST")
+	r.HandleFunc("/user", h.ListUsers(s.dbQueries)).Methods("GET")
+
 
 	return r
 }
