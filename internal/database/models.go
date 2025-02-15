@@ -10,14 +10,14 @@ import (
 )
 
 type Key struct {
-	ID        string
+	ID        int64
 	Keyname   string
 	Keycode   int64
 	CreatedAt time.Time
 }
 
 type Mouse struct {
-	ID        string
+	ID        int64
 	Keyname   string
 	IsMoved   int64
 	IsScroll  int64
