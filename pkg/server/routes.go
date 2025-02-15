@@ -16,6 +16,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.HandleFunc("/user", h.ListUsers(s.dbQueries)).Methods("GET")
 	r.HandleFunc("/user", h.DeleteUser(s.dbQueries)).Methods("DELETE")
 
+	// keys event handler
+	r.HandleFunc("/keys/all", h.ListAllKeys(s.dbQueries)).Methods("GET")
 
 	return r
 }
