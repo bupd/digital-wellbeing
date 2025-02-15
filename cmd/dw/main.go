@@ -10,7 +10,7 @@ import (
 func main() {
 	server := server.NewServer()
 
-	fmt.Printf("Ground Control running on port %s\n", server.Addr)
+  fmt.Printf("\nDigital Wellbeing running on server: %s\n", server.Addr)
 	err := server.ListenAndServe()
 	if err != nil {
 		log.Fatalf("cannot start server: %s", err)
