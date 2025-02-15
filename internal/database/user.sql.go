@@ -7,23 +7,16 @@ package database
 
 import (
 	"context"
-	"time"
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO user (name, created_at, updated_at)
-VALUES (?1, ?2, ?3)
+INSERT INTO user (name)
+VALUES (?1)
 RETURNING id, name, created_at, updated_at
 `
 
-type CreateUserParams struct {
-	Name      string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
-func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.Name, arg.CreatedAt, arg.UpdatedAt)
+func (q *Queries) CreateUser(ctx context.Context, name string) (User, error) {
+	row := q.db.QueryRowContext(ctx, createUser, name)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -32,6 +25,16 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const delteUser = `-- name: DelteUser :exec
+DELETE FROM user
+WHERE name = (?1)
+`
+
+func (q *Queries) DelteUser(ctx context.Context, name string) error {
+	_, err := q.db.ExecContext(ctx, delteUser, name)
+	return err
 }
 
 const listUsers = `-- name: ListUsers :many
