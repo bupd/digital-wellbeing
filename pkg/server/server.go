@@ -14,8 +14,19 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/bupd/digital-wellbeing/internal/database"
-	hook "github.com/robotn/gohook"
+	// hook "github.com/robotn/gohook"
 )
+
+// to-do: create working connection with the sqlite local database @~/.digital-wellbeing/data.db
+// to-do: user account connection with db
+// to-do: three tables(goal),
+// this first{keyboard, mouse}, then windows
+// to-do: add events directly to the sqlite db with query
+// to-do: fetch current data for past 24 hrs from DB
+// to-do: every 24 hrs put this data to another db named cumulative and aggregated so this will have the results of the past day
+// to-do: aggregated holds data for frontend and websites
+// to-do: cumulative holds all data more like a scrap of things
+
 
 type Server struct {
 	port      int
@@ -32,19 +43,19 @@ var (
 )
 
 func NewServer() *http.Server {
-	chanHook := hook.Start()
-	defer hook.End()
-
-	for ev := range chanHook {
-		fmt.Printf("hook: %v\n", ev)
-	}
+	// chanHook := hook.Start()
+	// defer hook.End()
+	//
+	// for ev := range chanHook {
+	// 	fmt.Printf("hook: %v\n", ev)
+	// }
 
 	port, err := strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
 		log.Fatalf("PORT is not valid: %v", err)
 	}
 
-	db, err := sql.Open("sqlite", ":memory:")
+	db, err := sql.Open("sqlite", "~/.digital-wellbeing/data.db")
 	if err != nil {
 		slog.Error("New server creation failed in connection to sqlite in memory DB")
 		slog.Error(fmt.Sprintf("Failed to open sqlite: %v", err))
@@ -71,11 +82,11 @@ func NewServer() *http.Server {
 	return server
 }
 
-func InputsHook() {
-	chanHook := hook.Start()
-	defer hook.End()
-
-	for ev := range chanHook {
-		fmt.Printf("hook: %v\n", ev)
-	}
-}
+// func InputsHook() {
+// 	chanHook := hook.Start()
+// 	defer hook.End()
+//
+// 	for ev := range chanHook {
+// 		fmt.Printf("hook: %v\n", ev)
+// 	}
+// }
