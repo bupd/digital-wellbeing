@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/bupd/digital-wellbeing/internal/database"
+	"github.com/bupd/digital-wellbeing/pkg/keymap"
 	hook "github.com/robotn/gohook"
 )
 
@@ -19,22 +20,6 @@ type Event struct {
 	Keychar int
 }
 
-func getKeyName(keychar rune) string {
-	// Implement your logic to map Keychar to Keyname
-	// For example, a basic lookup might be:
-	switch keychar {
-	case 106:
-		return "j"
-	case 107:
-		return "k"
-	case 13:
-		return "Enter"
-	// Add more mappings as needed
-	default:
-		return "Unknown"
-	}
-}
-
 func StartHookListener(db *database.Queries) {
 	// hook.Start() initializes the hook listener
 	chanHook := hook.Start()
@@ -46,7 +31,13 @@ func StartHookListener(db *database.Queries) {
 			// keycode := ev.Rawcode
 			keychar := ev.Keychar
 
-			keyname := getKeyName(keychar)
+			keyname := keymap.GetKeyName(keychar)
+			if keychar == 0 {
+				if ev.Rawcode > 65469 && ev.Rawcode < 65482 {
+					keyname = keymap.GetFKeyName(ev.Rawcode)
+				}
+			}
+
 			param := database.AddKeyParams{
 				Keyname: keyname,
 				Keycode: int64(keychar),
