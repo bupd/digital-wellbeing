@@ -71,11 +71,11 @@ func NewServer() *http.Server {
 	return server
 }
 
-// func InputsHook() {
-// 	chanHook := hook.Start()
-// 	defer hook.End()
-//
-// 	for ev := range chanHook {
-// 		fmt.Printf("hook: %v\n", ev)
-// 	}
-// }
+func InputsHook() {
+	chanHook := hook.Start()
+	defer hook.End()
+
+	for ev := range chanHook {
+		fmt.Printf("hook: %v\n", ev)
+	}
+}
