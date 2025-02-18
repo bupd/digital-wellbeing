@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"database/sql"
 	_ "embed"
 	"fmt"
@@ -15,6 +16,7 @@ import (
 
 	"github.com/bupd/digital-wellbeing/internal/database"
 	"github.com/bupd/digital-wellbeing/pkg/events"
+	"github.com/bupd/digital-wellbeing/utils"
 	// hook "github.com/robotn/gohook"
 )
 
@@ -97,13 +99,31 @@ func captureWindowData(dbQueries *database.Queries) {
 	for {
 		select {
 		case <-ticker.C:
+			var TotalCount, Duration int64
 			// Capture current window data
 			allWindows := events.GetAllWindows()
 			currentWindow := events.GetCurrentWindow()
-			data := events.MergeWindows(allWindows, currentWindow)
-			fmt.Println(data)
+			windows := events.MergeWindows(allWindows, currentWindow)
+			fmt.Println(windows)
 
-      // err := dbQueries.DelteUser
+			for _, window := range windows {
+				query := database.AddWmClassParams{
+					WmClass:    window.WmClass,
+					WmName:     window.WmName,
+					StartTime:  time.Now(),
+					EndTime:    time.Time{},
+					Duration:   Duration,
+					TotalCount: TotalCount,
+					IsActive:   utils.BoolToInt(window.IsActive),
+					UpdatedAt:  time.Now(),
+				}
+				res, err := dbQueries.AddWmClass(context.Background(), query)
+				if err != nil {
+					log.Fatalf("failed to add WmClass: %v", err)
+				}
+
+				fmt.Println("added window to db: ", res)
+			}
 
 			// Insert data into the DB
 			// err := InsertWindowData(db, currentWindow)
