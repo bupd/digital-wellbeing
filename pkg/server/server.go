@@ -20,11 +20,6 @@ import (
 	// hook "github.com/robotn/gohook"
 )
 
-// to-do: user account connection with db
-// to-do: three tables(goal),
-// this first{keyboard, mouse}, then windows
-// to-do: add events directly to the sqlite db with query
-// to-do: fetch current data for past 24 hrs from DB
 // to-do: every 24 hrs put this data to another db named cumulative and aggregated so this will have the results of the past day
 // to-do: aggregated holds data for frontend and websites
 // to-do: cumulative holds all data more like a scrap of things
@@ -84,6 +79,9 @@ func NewServer() *http.Server {
 		WriteTimeout: 30 * time.Second,
 	}
 
+	// Set the busy timeout (in milliseconds)
+	db.Exec("PRAGMA busy_timeout = 5000;") // Wait for 5 seconds if the database is locked
+
 	log.Println("Started hook listener listening foor the keys")
 	go events.StartHookListener(dbQueries)
 	go captureWindowData(dbQueries)
@@ -93,7 +91,7 @@ func NewServer() *http.Server {
 
 // captureWindowData runs in a goroutine and captures window data every second
 func captureWindowData(dbQueries *database.Queries) {
-	ticker := time.NewTicker(1 * time.Second)
+	ticker := time.NewTicker(8 * time.Second)
 	defer ticker.Stop()
 
 	for {
