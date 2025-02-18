@@ -46,6 +46,10 @@ func StartHookListener(db *database.Queries) {
 				continue
 			}
 		}
+
+    allWindows := GetAllWindows()
+    currentWindow := GetCurrentWindow()
+    data := MergeWindows(allWindows, currentWindow)
 	}
 }
 
