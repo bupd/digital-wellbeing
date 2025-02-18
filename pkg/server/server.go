@@ -20,11 +20,6 @@ import (
 	// hook "github.com/robotn/gohook"
 )
 
-// to-do: user account connection with db
-// to-do: three tables(goal),
-// this first{keyboard, mouse}, then windows
-// to-do: add events directly to the sqlite db with query
-// to-do: fetch current data for past 24 hrs from DB
 // to-do: every 24 hrs put this data to another db named cumulative and aggregated so this will have the results of the past day
 // to-do: aggregated holds data for frontend and websites
 // to-do: cumulative holds all data more like a scrap of things
