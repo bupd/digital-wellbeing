@@ -28,3 +28,24 @@ type User struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
+
+type Window struct {
+	ID        int64
+	WmClass   string
+	IsActive  int64
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+type Wmclass struct {
+	ID         int64
+	WmClass    string
+	WmName     interface{}
+	StartTime  time.Time
+	EndTime    time.Time
+	Duration   int64
+	TotalCount int64
+	IsActive   int64
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
