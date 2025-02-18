@@ -18,7 +18,7 @@ RETURNING id, wm_class, wm_name, start_time, end_time, duration, total_count, is
 
 type AddWmClassParams struct {
 	WmClass    string
-	WmName     interface{}
+	WmName     string
 	StartTime  time.Time
 	EndTime    time.Time
 	Duration   int64
@@ -218,7 +218,7 @@ FROM wmclass
 WHERE wm_name = ?1
 `
 
-func (q *Queries) ListWinByWmName(ctx context.Context, wmName interface{}) (Wmclass, error) {
+func (q *Queries) ListWinByWmName(ctx context.Context, wmName string) (Wmclass, error) {
 	row := q.db.QueryRowContext(ctx, listWinByWmName, wmName)
 	var i Wmclass
 	err := row.Scan(
@@ -247,7 +247,7 @@ ORDER BY event_count DESC
 
 type TopWinLastDayRow struct {
 	WmClass    string
-	WmName     interface{}
+	WmName     string
 	EventCount int64
 }
 
@@ -288,7 +288,7 @@ ORDER BY event_count DESC
 
 type TopWinLastHourRow struct {
 	WmClass    string
-	WmName     interface{}
+	WmName     string
 	EventCount int64
 }
 

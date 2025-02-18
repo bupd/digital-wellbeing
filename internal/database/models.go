@@ -40,7 +40,7 @@ type Window struct {
 type Wmclass struct {
 	ID         int64
 	WmClass    string
-	WmName     interface{}
+	WmName     string
 	StartTime  time.Time
 	EndTime    time.Time
 	Duration   int64
