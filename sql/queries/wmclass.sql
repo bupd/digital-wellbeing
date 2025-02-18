@@ -1,27 +1,9 @@
 -- name: ListAllWmclass :many
 SELECT * FROM wmclass;
 
--- name: AddWmclass :one
-INSERT OR REPLACE INTO wmclass (
-  wm_class,
-  wm_name,
-  start_time,
-  end_time,
-  duration,
-  total_count,
-  is_active,
-  updated_at
-)
-VALUES (
-  :wm_class,
-  :wm_name,
-  :start_time,
-  :end_time,
-  :duration,
-  :total_count,
-  :is_active,
-  :updated_at
-)
+-- name: AddWmClass :one
+INSERT OR REPLACE INTO wmclass (wm_class, wm_name, start_time, end_time, duration, total_count, is_active, updated_at)
+VALUES (:wm_class, :wm_name, :start_time, :end_time, :duration, :total_count, :is_active, :updated_at)
 RETURNING *;
 
 -- name: ListWinByWmClass :many
@@ -33,16 +15,21 @@ WHERE wm_class = :wm_class;
 SELECT *
 FROM wmclass
 WHERE wm_name = :wm_name;
-
--- name: ListLastHourWindows :many
+--
+-- name: ListLastHourWmClass :many
 SELECT *
 FROM wmclass
 WHERE updated_at >= datetime('now', '-1 hour');
 
--- name: ListLastDayWindows :many
+-- name: ListLastDayWmClass :many
 SELECT *
 FROM wmclass
-WHERE created_at >= DATETIME('now', '-1 day')
+WHERE created_at >= DATETIME('now', '-1 day');
+
+-- The below are leaving out because of the bugs in sqlc library
+-- beware of bug: >sqlc generate
+-- # package
+-- sql/queries/wmclass.sql:1:1: duplicate query name: AddWmClass
 
 -- name: TopWinLastDay :many
 SELECT wm_class, wm_name, COUNT(*) as event_count
