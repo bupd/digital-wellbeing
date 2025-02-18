@@ -88,7 +88,7 @@ func NewServer() *http.Server {
 
 // captureWindowData runs in a goroutine and captures window data every second
 func captureWindowData(dbQueries *database.Queries) {
-	ticker := time.NewTicker(1 * time.Second)
+	ticker := time.NewTicker(8 * time.Second)
 	defer ticker.Stop()
 
 	for {
