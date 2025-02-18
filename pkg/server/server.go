@@ -84,13 +84,13 @@ func NewServer() *http.Server {
 
 	log.Println("Started hook listener listening foor the keys")
 	go events.StartHookListener(dbQueries)
-	go captureWindowData(db)
+	go captureWindowData(dbQueries)
 
 	return server
 }
 
 // captureWindowData runs in a goroutine and captures window data every second
-func captureWindowData(db *sql.DB) {
+func captureWindowData(dbQueries *database.Queries) {
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
@@ -98,7 +98,13 @@ func captureWindowData(db *sql.DB) {
 		select {
 		case <-ticker.C:
 			// Capture current window data
-			_ = events.GetCurrentWindow()
+			allWindows := events.GetAllWindows()
+			currentWindow := events.GetCurrentWindow()
+			data := events.MergeWindows(allWindows, currentWindow)
+			fmt.Println(data)
+
+      // err := dbQueries.DelteUser
+
 			// Insert data into the DB
 			// err := InsertWindowData(db, currentWindow)
 			// if err != nil {
