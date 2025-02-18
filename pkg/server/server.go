@@ -53,10 +53,10 @@ func NewServer() *http.Server {
 	if err != nil {
 		log.Fatalf("PORT is not valid: %v", err)
 	}
-  home, err := os.UserHomeDir()
-  if err != nil {
-    log.Fatalf("unable to get user home directory: %v", err)
-  }
+	home, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatalf("unable to get user home directory: %v", err)
+	}
 
 	db, err := sql.Open("sqlite", home+"/.digital-wellbeing/data.db")
 	if err != nil {
@@ -82,12 +82,32 @@ func NewServer() *http.Server {
 		WriteTimeout: 30 * time.Second,
 	}
 
-
-  log.Println("Started hook listener listening foor the keys")
-  go events.StartHookListener(dbQueries)
-
+	log.Println("Started hook listener listening foor the keys")
+	go events.StartHookListener(dbQueries)
+	go captureWindowData(db)
 
 	return server
+}
+
+// captureWindowData runs in a goroutine and captures window data every second
+func captureWindowData(db *sql.DB) {
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			// Capture current window data
+			_ = events.GetCurrentWindow()
+			// Insert data into the DB
+			// err := InsertWindowData(db, currentWindow)
+			// if err != nil {
+			// 	log.Println("Error inserting window data:", err)
+			// } else {
+			// 	log.Printf("Inserted window data: %+v", currentWindow)
+			// }
+		}
+	}
 }
 
 // func InputsHook() {
