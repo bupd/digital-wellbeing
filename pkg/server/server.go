@@ -79,6 +79,9 @@ func NewServer() *http.Server {
 		WriteTimeout: 30 * time.Second,
 	}
 
+	// Set the busy timeout (in milliseconds)
+	db.Exec("PRAGMA busy_timeout = 5000;") // Wait for 5 seconds if the database is locked
+
 	log.Println("Started hook listener listening foor the keys")
 	go events.StartHookListener(dbQueries)
 	go captureWindowData(dbQueries)
