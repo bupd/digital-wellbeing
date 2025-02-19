@@ -1,10 +1,13 @@
 package events
 
 import (
+	"fmt"
 	"log"
 	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/bupd/digital-wellbeing/pkg/retry"
 )
 
 type Window struct {
@@ -15,19 +18,32 @@ type Window struct {
 
 // get current Active Window
 func GetCurrentWindow() Window {
-	ticker := time.NewTicker(1 * time.Second)
-	defer ticker.Stop()
 
-	// xdotool getactivewindow getwindowname getwindowclassname
-	cmd := exec.Command("xdotool", "getactivewindow", "getwindowname", "getwindowclassname")
-	out, err := cmd.Output()
+  var xdotoolData []byte
+
+	// Define the function to run the xdotool command.
+	runXdotool := func() error {
+		cmd := exec.Command("xdotool", "getactivewindow", "getwindowname", "getwindowclassname")
+		out, err := cmd.Output()
+		if err != nil {
+			log.Printf("Failed to execute xdotool: %s", err)
+			return err // Return the error so it can be retried
+		}
+    xdotoolData = out
+		// Optionally print the output if the command succeeds
+		fmt.Println(string(out))
+		return nil // No error, successful execution
+	}
+
+	// Retry calling the runXdotool function with a max of 3 attempts and 2 seconds delay between attempts.
+  err := retry.Retry(3, 2*time.Second, runXdotool)
 	if err != nil {
-		log.Fatalf("Failed to execute xdotool: %s", err)
+		log.Fatalf("All attempts failed: %v", err)
 	}
 	// fmt.Println(string(out))
 
 	// Convert the byte slice to string and split by newline to get the name and class
-	windowInfo := string(out)
+	windowInfo := string(xdotoolData)
 	lines := splitByNewline(windowInfo)
 
 	// Make sure we have the correct output lines
