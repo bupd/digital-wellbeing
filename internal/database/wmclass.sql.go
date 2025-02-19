@@ -10,10 +10,9 @@ import (
 	"time"
 )
 
-const addWmClass = `-- name: AddWmClass :one
+const addWmClass = `-- name: AddWmClass :exec
 INSERT OR REPLACE INTO wmclass (wm_class, wm_name, start_time, end_time, duration, total_count, is_active, updated_at)
 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
-RETURNING id, wm_class, wm_name, start_time, end_time, duration, total_count, is_active, created_at, updated_at
 `
 
 type AddWmClassParams struct {
@@ -27,8 +26,8 @@ type AddWmClassParams struct {
 	UpdatedAt  time.Time
 }
 
-func (q *Queries) AddWmClass(ctx context.Context, arg AddWmClassParams) (Wmclass, error) {
-	row := q.db.QueryRowContext(ctx, addWmClass,
+func (q *Queries) AddWmClass(ctx context.Context, arg AddWmClassParams) error {
+	_, err := q.db.ExecContext(ctx, addWmClass,
 		arg.WmClass,
 		arg.WmName,
 		arg.StartTime,
@@ -38,20 +37,7 @@ func (q *Queries) AddWmClass(ctx context.Context, arg AddWmClassParams) (Wmclass
 		arg.IsActive,
 		arg.UpdatedAt,
 	)
-	var i Wmclass
-	err := row.Scan(
-		&i.ID,
-		&i.WmClass,
-		&i.WmName,
-		&i.StartTime,
-		&i.EndTime,
-		&i.Duration,
-		&i.TotalCount,
-		&i.IsActive,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
+	return err
 }
 
 const listAllWmclass = `-- name: ListAllWmclass :many
