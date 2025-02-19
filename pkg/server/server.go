@@ -16,7 +16,9 @@ import (
 
 	"github.com/bupd/digital-wellbeing/internal/database"
 	"github.com/bupd/digital-wellbeing/pkg/events"
+	"github.com/bupd/digital-wellbeing/pkg/retry"
 	"github.com/bupd/digital-wellbeing/utils"
+	"github.com/rs/cors"
 	// hook "github.com/robotn/gohook"
 )
 
@@ -70,10 +72,12 @@ func NewServer() *http.Server {
 		dbQueries: dbQueries,
 	}
 
+	handler := cors.Default().Handler(NewServer.RegisterRoutes())
+
 	// Declare Server config
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", NewServer.port),
-		Handler:      NewServer.RegisterRoutes(),
+		Handler:      handler,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
