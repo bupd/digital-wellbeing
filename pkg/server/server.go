@@ -95,7 +95,7 @@ func NewServer() *http.Server {
 
 // captureWindowData runs in a goroutine and captures window data every second
 func captureWindowData(dbQueries *database.Queries) {
-	ticker := time.NewTicker(8 * time.Second)
+	ticker := time.NewTicker(12 * time.Second)
 	defer ticker.Stop()
 
 	for {
@@ -119,12 +119,30 @@ func captureWindowData(dbQueries *database.Queries) {
 					IsActive:   utils.BoolToInt(window.IsActive),
 					UpdatedAt:  time.Now(),
 				}
-				res, err := dbQueries.AddWmClass(context.Background(), query)
+				err := dbQueries.AddWmClass(context.Background(), query)
 				if err != nil {
-					log.Fatalf("failed to add WmClass: %v", err)
+					log.Printf("failed to add WmClass: %v", err)
 				}
 
-				fmt.Println("added window to db: ", res)
+				// enclose the above one in retry mechanism
+				err = retry.Retry(3, 2*time.Second, func() error {
+					// Replace this with the actual operation you want to retry.
+					fmt.Println("Trying to perform the operation...")
+					err := dbQueries.AddWmClass(context.Background(), query)
+					if err != nil {
+						log.Printf("failed to add WmClass: %v", err)
+						return fmt.Errorf("failed to add WmClass to DB: %v", err)
+					}
+					return nil
+				})
+
+				if err != nil {
+					fmt.Println("Add to DB failed after retries:", err)
+				} else {
+					fmt.Println("Curretn Window added to DB")
+				}
+
+				// fmt.Println("added window to db: ", res)
 			}
 
 			// Insert data into the DB
