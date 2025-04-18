@@ -18,4 +18,3 @@ func Retry(attempts int, sleep time.Duration, fn func() error) error {
 	}
 	return errors.New("all retry attempts failed")
 }
-

@@ -11,19 +11,19 @@ import (
 )
 
 const addWmClass = `-- name: AddWmClass :exec
-INSERT OR REPLACE INTO wmclass (wm_class, wm_name, start_time, end_time, duration, total_count, is_active, updated_at)
+INSERT OR REPLACE INTO wmclass (wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, updated_at)
 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
 `
 
 type AddWmClassParams struct {
-	WmClass    string
-	WmName     string
-	StartTime  time.Time
-	EndTime    time.Time
-	Duration   int64
-	TotalCount int64
-	IsActive   int64
-	UpdatedAt  time.Time
+	WmClass        string
+	WmName         string
+	StartTime      time.Time
+	EndTime        time.Time
+	Duration       int64
+	ActiveDuration int64
+	IsActive       int64
+	UpdatedAt      time.Time
 }
 
 func (q *Queries) AddWmClass(ctx context.Context, arg AddWmClassParams) error {
@@ -33,7 +33,7 @@ func (q *Queries) AddWmClass(ctx context.Context, arg AddWmClassParams) error {
 		arg.StartTime,
 		arg.EndTime,
 		arg.Duration,
-		arg.TotalCount,
+		arg.ActiveDuration,
 		arg.IsActive,
 		arg.UpdatedAt,
 	)
@@ -41,7 +41,7 @@ func (q *Queries) AddWmClass(ctx context.Context, arg AddWmClassParams) error {
 }
 
 const listAllWmclass = `-- name: ListAllWmclass :many
-SELECT id, wm_class, wm_name, start_time, end_time, duration, total_count, is_active, created_at, updated_at FROM wmclass
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at FROM wmclass
 `
 
 func (q *Queries) ListAllWmclass(ctx context.Context) ([]Wmclass, error) {
@@ -60,7 +60,7 @@ func (q *Queries) ListAllWmclass(ctx context.Context) ([]Wmclass, error) {
 			&i.StartTime,
 			&i.EndTime,
 			&i.Duration,
-			&i.TotalCount,
+			&i.ActiveDuration,
 			&i.IsActive,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -79,7 +79,7 @@ func (q *Queries) ListAllWmclass(ctx context.Context) ([]Wmclass, error) {
 }
 
 const listLastDayWmClass = `-- name: ListLastDayWmClass :many
-SELECT id, wm_class, wm_name, start_time, end_time, duration, total_count, is_active, created_at, updated_at
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
 WHERE created_at >= DATETIME('now', '-1 day')
 `
@@ -100,7 +100,7 @@ func (q *Queries) ListLastDayWmClass(ctx context.Context) ([]Wmclass, error) {
 			&i.StartTime,
 			&i.EndTime,
 			&i.Duration,
-			&i.TotalCount,
+			&i.ActiveDuration,
 			&i.IsActive,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -119,7 +119,7 @@ func (q *Queries) ListLastDayWmClass(ctx context.Context) ([]Wmclass, error) {
 }
 
 const listLastHourWmClass = `-- name: ListLastHourWmClass :many
-SELECT id, wm_class, wm_name, start_time, end_time, duration, total_count, is_active, created_at, updated_at
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
 WHERE updated_at >= datetime('now', '-1 hour')
 `
@@ -140,7 +140,7 @@ func (q *Queries) ListLastHourWmClass(ctx context.Context) ([]Wmclass, error) {
 			&i.StartTime,
 			&i.EndTime,
 			&i.Duration,
-			&i.TotalCount,
+			&i.ActiveDuration,
 			&i.IsActive,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -159,7 +159,7 @@ func (q *Queries) ListLastHourWmClass(ctx context.Context) ([]Wmclass, error) {
 }
 
 const listWinByWmClass = `-- name: ListWinByWmClass :many
-SELECT id, wm_class, wm_name, start_time, end_time, duration, total_count, is_active, created_at, updated_at
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
 WHERE wm_class = ?1
 `
@@ -180,7 +180,7 @@ func (q *Queries) ListWinByWmClass(ctx context.Context, wmClass string) ([]Wmcla
 			&i.StartTime,
 			&i.EndTime,
 			&i.Duration,
-			&i.TotalCount,
+			&i.ActiveDuration,
 			&i.IsActive,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -199,7 +199,7 @@ func (q *Queries) ListWinByWmClass(ctx context.Context, wmClass string) ([]Wmcla
 }
 
 const listWinByWmName = `-- name: ListWinByWmName :one
-SELECT id, wm_class, wm_name, start_time, end_time, duration, total_count, is_active, created_at, updated_at
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
 WHERE wm_name = ?1
 `
@@ -214,7 +214,7 @@ func (q *Queries) ListWinByWmName(ctx context.Context, wmName string) (Wmclass, 
 		&i.StartTime,
 		&i.EndTime,
 		&i.Duration,
-		&i.TotalCount,
+		&i.ActiveDuration,
 		&i.IsActive,
 		&i.CreatedAt,
 		&i.UpdatedAt,

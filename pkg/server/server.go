@@ -40,7 +40,7 @@ var (
 	HOST     = os.Getenv("DB_HOST")
 )
 
-func NewServer() *http.Server {
+func NewServer(PORT string) *http.Server {
 	// chanHook := hook.Start()
 	// defer hook.End()
 	//
@@ -48,10 +48,11 @@ func NewServer() *http.Server {
 	// 	fmt.Printf("hook: %v\n", ev)
 	// }
 
-	port, err := strconv.Atoi(os.Getenv("PORT"))
+	port, err := strconv.Atoi(PORT)
 	if err != nil {
 		log.Fatalf("PORT is not valid: %v", err)
 	}
+
 	home, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("unable to get user home directory: %v", err)
@@ -101,7 +102,7 @@ func captureWindowData(dbQueries *database.Queries) {
 	for {
 		select {
 		case <-ticker.C:
-			var TotalCount, Duration int64
+			var ActiveDuration, Duration int64
 			// Capture current window data
 			allWindows := events.GetAllWindows()
 			currentWindow := events.GetCurrentWindow()
@@ -115,7 +116,7 @@ func captureWindowData(dbQueries *database.Queries) {
 					StartTime:  time.Now(),
 					EndTime:    time.Time{},
 					Duration:   Duration,
-					TotalCount: TotalCount,
+					ActiveDuration: ActiveDuration,
 					IsActive:   utils.BoolToInt(window.IsActive),
 					UpdatedAt:  time.Now(),
 				}

@@ -19,7 +19,7 @@ type Window struct {
 // get current Active Window
 func GetCurrentWindow() Window {
 
-  var xdotoolData []byte
+	var xdotoolData []byte
 
 	// Define the function to run the xdotool command.
 	runXdotool := func() error {
@@ -29,14 +29,14 @@ func GetCurrentWindow() Window {
 			log.Printf("Failed to execute xdotool: %s", err)
 			return err // Return the error so it can be retried
 		}
-    xdotoolData = out
+		xdotoolData = out
 		// Optionally print the output if the command succeeds
 		fmt.Println(string(out))
 		return nil // No error, successful execution
 	}
 
 	// Retry calling the runXdotool function with a max of 3 attempts and 2 seconds delay between attempts.
-  err := retry.Retry(3, 2*time.Second, runXdotool)
+	err := retry.Retry(3, 2*time.Second, runXdotool)
 	if err != nil {
 		log.Fatalf("All attempts failed: %v", err)
 	}
