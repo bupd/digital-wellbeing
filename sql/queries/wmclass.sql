@@ -2,8 +2,8 @@
 SELECT * FROM wmclass;
 
 -- name: AddWmClass :exec
-INSERT OR REPLACE INTO wmclass (wm_class, wm_name, start_time, end_time, duration, total_count, is_active, updated_at)
-VALUES (:wm_class, :wm_name, :start_time, :end_time, :duration, :total_count, :is_active, :updated_at);
+INSERT OR REPLACE INTO wmclass (wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, updated_at)
+VALUES (:wm_class, :wm_name, :start_time, :end_time, :duration, :active_duration, :is_active, :updated_at);
 
 -- name: ListWinByWmClass :many
 SELECT *

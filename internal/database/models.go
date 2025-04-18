@@ -38,14 +38,14 @@ type Window struct {
 }
 
 type Wmclass struct {
-	ID         int64
-	WmClass    string
-	WmName     string
-	StartTime  time.Time
-	EndTime    time.Time
-	Duration   int64
-	TotalCount int64
-	IsActive   int64
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	ID             int64
+	WmClass        string
+	WmName         string
+	StartTime      time.Time
+	EndTime        time.Time
+	Duration       int64
+	ActiveDuration int64
+	IsActive       int64
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 }

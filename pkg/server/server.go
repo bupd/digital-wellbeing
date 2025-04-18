@@ -102,7 +102,7 @@ func captureWindowData(dbQueries *database.Queries) {
 	for {
 		select {
 		case <-ticker.C:
-			var TotalCount, Duration int64
+			var ActiveDuration, Duration int64
 			// Capture current window data
 			allWindows := events.GetAllWindows()
 			currentWindow := events.GetCurrentWindow()
@@ -116,7 +116,7 @@ func captureWindowData(dbQueries *database.Queries) {
 					StartTime:  time.Now(),
 					EndTime:    time.Time{},
 					Duration:   Duration,
-					TotalCount: TotalCount,
+					ActiveDuration: ActiveDuration,
 					IsActive:   utils.BoolToInt(window.IsActive),
 					UpdatedAt:  time.Now(),
 				}
