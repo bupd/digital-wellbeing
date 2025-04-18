@@ -40,7 +40,7 @@ var (
 	HOST     = os.Getenv("DB_HOST")
 )
 
-func NewServer(PORT string) *http.Server {
+func NewServer(PORT, DBName string) *http.Server {
 	// chanHook := hook.Start()
 	// defer hook.End()
 	//
@@ -58,7 +58,7 @@ func NewServer(PORT string) *http.Server {
 		log.Fatalf("unable to get user home directory: %v", err)
 	}
 
-	db, err := sql.Open("sqlite", home+"/.digital-wellbeing/data.db")
+	db, err := sql.Open("sqlite", home+"/.digital-wellbeing/"+DBName+".db")
 	if err != nil {
 		slog.Error("New server creation failed in connection to sqlite in memory DB")
 		slog.Error(fmt.Sprintf("Failed to open sqlite: %v", err))
