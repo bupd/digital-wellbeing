@@ -269,4 +269,3 @@ func GetMiscKeyName(rawcode uint16) string {
 		return "Unknown: " + fmt.Sprintf("%v", rawcode)
 	}
 }
-
