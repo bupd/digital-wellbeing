@@ -12,6 +12,7 @@ go install github.com/bupd/digital-wellbeing/cmd/dw@latest
 
 ## Run 
 ```shell
+export PORT="8888"
 dw
 ```
 
