@@ -40,6 +40,30 @@ func (q *Queries) AddWmClass(ctx context.Context, arg AddWmClassParams) error {
 	return err
 }
 
+const getWinByWmName = `-- name: GetWinByWmName :one
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
+FROM wmclass
+WHERE wm_name = ?1
+`
+
+func (q *Queries) GetWinByWmName(ctx context.Context, wmName string) (Wmclass, error) {
+	row := q.db.QueryRowContext(ctx, getWinByWmName, wmName)
+	var i Wmclass
+	err := row.Scan(
+		&i.ID,
+		&i.WmClass,
+		&i.WmName,
+		&i.StartTime,
+		&i.EndTime,
+		&i.Duration,
+		&i.ActiveDuration,
+		&i.IsActive,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const listAllWmclass = `-- name: ListAllWmclass :many
 SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at FROM wmclass
 `
@@ -196,30 +220,6 @@ func (q *Queries) ListWinByWmClass(ctx context.Context, wmClass string) ([]Wmcla
 		return nil, err
 	}
 	return items, nil
-}
-
-const listWinByWmName = `-- name: ListWinByWmName :one
-SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
-FROM wmclass
-WHERE wm_name = ?1
-`
-
-func (q *Queries) ListWinByWmName(ctx context.Context, wmName string) (Wmclass, error) {
-	row := q.db.QueryRowContext(ctx, listWinByWmName, wmName)
-	var i Wmclass
-	err := row.Scan(
-		&i.ID,
-		&i.WmClass,
-		&i.WmName,
-		&i.StartTime,
-		&i.EndTime,
-		&i.Duration,
-		&i.ActiveDuration,
-		&i.IsActive,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
 }
 
 const topWinLastDay = `-- name: TopWinLastDay :many
