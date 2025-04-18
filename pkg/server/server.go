@@ -110,17 +110,29 @@ func captureWindowData(dbQueries *database.Queries) {
 			fmt.Println(windows)
 
 			for _, window := range windows {
-				query := database.AddWmClassParams{
-					WmClass:    window.WmClass,
-					WmName:     window.WmName,
-					StartTime:  time.Now(),
-					EndTime:    time.Time{},
-					Duration:   Duration,
-					ActiveDuration: ActiveDuration,
-					IsActive:   utils.BoolToInt(window.IsActive),
-					UpdatedAt:  time.Now(),
+				// GET equivalent window from DB
+				windw, err := dbQueries.GetWinByWmName(context.TODO(), window.WmName)
+				if err != nil {
+					log.Printf("failed to get WmName: %s, err: %v", window.WmName, err)
 				}
-				err := dbQueries.AddWmClass(context.Background(), query)
+
+				previousUpdate := windw.UpdatedAt
+				Duration = int64(time.Since(previousUpdate).Seconds())
+
+				if windw.IsActive == 1 {
+					ActiveDuration = Duration
+				}
+
+				query := database.AddWmClassParams{
+					WmClass:        window.WmClass,
+					WmName:         window.WmName,
+					EndTime:        time.Time{},
+					Duration:       windw.Duration + Duration,
+					ActiveDuration: windw.ActiveDuration + ActiveDuration,
+					IsActive:       utils.BoolToInt(window.IsActive),
+					UpdatedAt:      time.Now(),
+				}
+				err = dbQueries.AddWmClass(context.Background(), query)
 				if err != nil {
 					log.Printf("failed to add WmClass: %v", err)
 				}
