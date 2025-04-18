@@ -10,7 +10,7 @@ SELECT *
 FROM wmclass
 WHERE wm_class = :wm_class;
 
--- name: ListWinByWmName :one
+-- name: GetWinByWmName :one
 SELECT *
 FROM wmclass
 WHERE wm_name = :wm_name;
