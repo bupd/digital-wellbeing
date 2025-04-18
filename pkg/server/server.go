@@ -40,7 +40,7 @@ var (
 	HOST     = os.Getenv("DB_HOST")
 )
 
-func NewServer() *http.Server {
+func NewServer(PORT string) *http.Server {
 	// chanHook := hook.Start()
 	// defer hook.End()
 	//
@@ -48,10 +48,11 @@ func NewServer() *http.Server {
 	// 	fmt.Printf("hook: %v\n", ev)
 	// }
 
-	port, err := strconv.Atoi(os.Getenv("PORT"))
+	port, err := strconv.Atoi(PORT)
 	if err != nil {
 		log.Fatalf("PORT is not valid: %v", err)
 	}
+
 	home, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("unable to get user home directory: %v", err)
