@@ -26,5 +26,10 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.HandleFunc("/mouse/1hr", h.ListMousePastHour(s.dbQueries)).Methods("GET")
 	r.HandleFunc("/mouse/1day", h.ListMouseEventsLastDay(s.dbQueries)).Methods("GET")
 
+	// window events handler
+	r.HandleFunc("/window/all", h.ListAllWindowEvents(s.dbQueries)).Methods("GET")
+	r.HandleFunc("/window/1hr", h.ListMousePastHour(s.dbQueries)).Methods("GET")
+	r.HandleFunc("/window/1day", h.ListMouseEventsLastDay(s.dbQueries)).Methods("GET")
+
 	return r
 }
