@@ -1,8 +1,30 @@
 # digital-wellbeing
 Linux app more than Digital Wellbeing found in Androids.
 
+
+![ChatGPT Image Apr 18, 2025, 03_14_14 PM](https://github.com/user-attachments/assets/c8c61ce8-708f-43a0-ae84-a78ae7321c6f)
+
+
+## Installation
+```shell
+go install github.com/bupd/digital-wellbeing/cmd/dw@latest
+```
+
+## Run 
+```shell
+dw
+```
+
+## Output
+
+![WhatsApp Image 2025-02-19 at 5 59 31 AM](https://github.com/user-attachments/assets/8e20fe00-94a5-449d-9a1f-8232cc548d10)
+
+
 ## Tools I am gonna use
 xev && evtest for logging different devices input which would look something like the below
+
+
+
 
 ```bash
 so the below are the keys got from
