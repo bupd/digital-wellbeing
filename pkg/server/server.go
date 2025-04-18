@@ -117,8 +117,10 @@ func captureWindowData(dbQueries *database.Queries) {
 					duration := int64(time.Since(previousUpdate).Seconds())
 					Duration = duration + windw.Duration
 
-					if windw.IsActive == 1 {
+					if window.IsActive {
 						ActiveDuration = duration + windw.ActiveDuration
+					} else {
+						ActiveDuration = windw.ActiveDuration
 					}
 				} else {
 					log.Printf("failed to get WmName: %s, err: %v", window.WmName, err)
