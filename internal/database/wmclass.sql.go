@@ -227,7 +227,7 @@ func (q *Queries) ListWinByWmClass(ctx context.Context, wmClass string) ([]Wmcla
 const topActiveDurationWinLastDay = `-- name: TopActiveDurationWinLastDay :many
 SELECT wm_class, active_duration
 FROM wmclass AS w
-WHERE updated_at >= datetime('now', '-1 day')
+WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
   AND active_duration = (
     SELECT MAX(active_duration)
     FROM wmclass
@@ -311,8 +311,7 @@ const topDurationWinLastDay = `-- name: TopDurationWinLastDay :many
 SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
 WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
-GROUP BY wm_class, wm_name
-ORDER BY duration DESC
+ORDER BY active_duration DESC
 `
 
 // The below are leaving out because of the bugs in sqlc library
@@ -356,9 +355,8 @@ func (q *Queries) TopDurationWinLastDay(ctx context.Context) ([]Wmclass, error) 
 const topDurationWinLastHour = `-- name: TopDurationWinLastHour :many
 SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
-WHERE updated_at >= datetime('now', '-1 hour') -- Filter for the last 24 hours
-GROUP BY wm_class
-ORDER BY duration DESC
+WHERE updated_at >= datetime('now', '-1 hour')
+ORDER BY active_duration DESC
 `
 
 func (q *Queries) TopDurationWinLastHour(ctx context.Context) ([]Wmclass, error) {
