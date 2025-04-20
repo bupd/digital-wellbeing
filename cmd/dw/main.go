@@ -12,8 +12,9 @@ import (
 func main() {
 	conf := config.GetConfig()
 	port := conf.PORT
+	dbName := conf.DBNAME
 
-	server := server.NewServer(port)
+	server := server.NewServer(port, dbName)
 
 	fmt.Printf("\nDigital Wellbeing running on server: %s\n", server.Addr)
 	err := server.ListenAndServe()

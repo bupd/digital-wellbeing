@@ -30,16 +30,30 @@ WHERE created_at >= DATETIME('now', '-1 day');
 -- # package
 -- sql/queries/wmclass.sql:1:1: duplicate query name: AddWmClass
 
--- name: TopWinLastDay :many
-SELECT wm_class, wm_name, COUNT(*) as event_count
+-- name: TopDurationWinLastDay :many
+SELECT *
 FROM wmclass
 WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
 GROUP BY wm_class, wm_name
-ORDER BY event_count DESC;
+ORDER BY duration DESC;
 
--- name: TopWinLastHour :many
-SELECT wm_class, wm_name, COUNT(*) as event_count
+-- name: TopDurationWinLastHour :many
+SELECT *
 FROM wmclass
 WHERE start_time >= datetime('now', '-1 hour') -- Filter for the last 24 hours
-GROUP BY wm_class
-ORDER BY event_count DESC;
+GROUP BY wm_class, wm_name
+ORDER BY duration DESC;
+
+-- name: TopActiveDurationWinLastDay :many
+SELECT *
+FROM wmclass
+WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
+GROUP BY wm_class, wm_name
+ORDER BY active_duration DESC;
+
+-- name: TopActiveDurationWinLastHour :many
+SELECT *
+FROM wmclass
+WHERE start_time >= datetime('now', '-1 hour') -- Filter for the last 24 hours
+GROUP BY wm_class, wm_name
+ORDER BY active_duration DESC;

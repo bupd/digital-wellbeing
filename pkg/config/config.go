@@ -11,7 +11,8 @@ import (
 
 // Config structure to match the TOML structure
 type Config struct {
-	PORT string `mapstructure:"PORT"`
+	PORT   string `mapstructure:"PORT"`
+	DBNAME string `mapstructure:"DBNAME"`
 }
 
 // Helper function to read the config file using Viper
@@ -69,7 +70,8 @@ func createDefaultConfigFile(configPath string) error {
 	// For example:
 	configContent := `# Default configuration for Digital Wellbeing
 # Add your configuration here
-PORT =  "8888"
+PORT = "8888"
+DBNAME = "data"
 `
 
 	// Write the content to the file
