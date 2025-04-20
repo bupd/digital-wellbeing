@@ -105,7 +105,8 @@ func (q *Queries) ListAllWmclass(ctx context.Context) ([]Wmclass, error) {
 const listLastDayWmClass = `-- name: ListLastDayWmClass :many
 SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
-WHERE created_at >= DATETIME('now', '-1 day')
+WHERE updated_at >= DATETIME('now', '-1 day')
+ORDER BY duration DESC
 `
 
 func (q *Queries) ListLastDayWmClass(ctx context.Context) ([]Wmclass, error) {
@@ -146,6 +147,7 @@ const listLastHourWmClass = `-- name: ListLastHourWmClass :many
 SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
 WHERE updated_at >= datetime('now', '-1 hour')
+ORDER BY duration DESC
 `
 
 func (q *Queries) ListLastHourWmClass(ctx context.Context) ([]Wmclass, error) {
@@ -223,34 +225,33 @@ func (q *Queries) ListWinByWmClass(ctx context.Context, wmClass string) ([]Wmcla
 }
 
 const topActiveDurationWinLastDay = `-- name: TopActiveDurationWinLastDay :many
-SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
-FROM wmclass
-WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
-GROUP BY wm_class, wm_name
+SELECT wm_class, active_duration
+FROM wmclass AS w
+WHERE updated_at >= datetime('now', '-1 day')
+  AND active_duration = (
+    SELECT MAX(active_duration)
+    FROM wmclass
+    WHERE wm_class = w.wm_class
+      AND updated_at >= datetime('now', '-1 day')
+  )
 ORDER BY active_duration DESC
 `
 
-func (q *Queries) TopActiveDurationWinLastDay(ctx context.Context) ([]Wmclass, error) {
+type TopActiveDurationWinLastDayRow struct {
+	WmClass        string
+	ActiveDuration int64
+}
+
+func (q *Queries) TopActiveDurationWinLastDay(ctx context.Context) ([]TopActiveDurationWinLastDayRow, error) {
 	rows, err := q.db.QueryContext(ctx, topActiveDurationWinLastDay)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Wmclass
+	var items []TopActiveDurationWinLastDayRow
 	for rows.Next() {
-		var i Wmclass
-		if err := rows.Scan(
-			&i.ID,
-			&i.WmClass,
-			&i.WmName,
-			&i.StartTime,
-			&i.EndTime,
-			&i.Duration,
-			&i.ActiveDuration,
-			&i.IsActive,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
+		var i TopActiveDurationWinLastDayRow
+		if err := rows.Scan(&i.WmClass, &i.ActiveDuration); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -265,34 +266,33 @@ func (q *Queries) TopActiveDurationWinLastDay(ctx context.Context) ([]Wmclass, e
 }
 
 const topActiveDurationWinLastHour = `-- name: TopActiveDurationWinLastHour :many
-SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
-FROM wmclass
-WHERE start_time >= datetime('now', '-1 hour') -- Filter for the last 24 hours
-GROUP BY wm_class, wm_name
+SELECT wm_class, active_duration
+FROM wmclass AS w
+WHERE updated_at >= datetime('now', '-1 hour')
+  AND active_duration = (
+    SELECT MAX(active_duration)
+    FROM wmclass
+    WHERE wm_class = w.wm_class
+      AND updated_at >= datetime('now', '-1 hour')
+  )
 ORDER BY active_duration DESC
 `
 
-func (q *Queries) TopActiveDurationWinLastHour(ctx context.Context) ([]Wmclass, error) {
+type TopActiveDurationWinLastHourRow struct {
+	WmClass        string
+	ActiveDuration int64
+}
+
+func (q *Queries) TopActiveDurationWinLastHour(ctx context.Context) ([]TopActiveDurationWinLastHourRow, error) {
 	rows, err := q.db.QueryContext(ctx, topActiveDurationWinLastHour)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Wmclass
+	var items []TopActiveDurationWinLastHourRow
 	for rows.Next() {
-		var i Wmclass
-		if err := rows.Scan(
-			&i.ID,
-			&i.WmClass,
-			&i.WmName,
-			&i.StartTime,
-			&i.EndTime,
-			&i.Duration,
-			&i.ActiveDuration,
-			&i.IsActive,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
+		var i TopActiveDurationWinLastHourRow
+		if err := rows.Scan(&i.WmClass, &i.ActiveDuration); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -356,8 +356,8 @@ func (q *Queries) TopDurationWinLastDay(ctx context.Context) ([]Wmclass, error) 
 const topDurationWinLastHour = `-- name: TopDurationWinLastHour :many
 SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
-WHERE start_time >= datetime('now', '-1 hour') -- Filter for the last 24 hours
-GROUP BY wm_class, wm_name
+WHERE updated_at >= datetime('now', '-1 hour') -- Filter for the last 24 hours
+GROUP BY wm_class
 ORDER BY duration DESC
 `
 

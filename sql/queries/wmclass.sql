@@ -18,12 +18,14 @@ WHERE wm_name = :wm_name;
 -- name: ListLastHourWmClass :many
 SELECT *
 FROM wmclass
-WHERE updated_at >= datetime('now', '-1 hour');
+WHERE updated_at >= datetime('now', '-1 hour')
+ORDER BY duration DESC;
 
 -- name: ListLastDayWmClass :many
 SELECT *
 FROM wmclass
-WHERE created_at >= DATETIME('now', '-1 day');
+WHERE updated_at >= DATETIME('now', '-1 day')
+ORDER BY duration DESC;
 
 -- The below are leaving out because of the bugs in sqlc library
 -- beware of bug: >sqlc generate
@@ -40,20 +42,30 @@ ORDER BY duration DESC;
 -- name: TopDurationWinLastHour :many
 SELECT *
 FROM wmclass
-WHERE start_time >= datetime('now', '-1 hour') -- Filter for the last 24 hours
-GROUP BY wm_class, wm_name
+WHERE updated_at >= datetime('now', '-1 hour') -- Filter for the last 24 hours
+GROUP BY wm_class
 ORDER BY duration DESC;
 
 -- name: TopActiveDurationWinLastDay :many
-SELECT *
-FROM wmclass
-WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
-GROUP BY wm_class, wm_name
+SELECT wm_class, active_duration
+FROM wmclass AS w
+WHERE updated_at >= datetime('now', '-1 day')
+  AND active_duration = (
+    SELECT MAX(active_duration)
+    FROM wmclass
+    WHERE wm_class = w.wm_class
+      AND updated_at >= datetime('now', '-1 day')
+  )
 ORDER BY active_duration DESC;
 
 -- name: TopActiveDurationWinLastHour :many
-SELECT *
-FROM wmclass
-WHERE start_time >= datetime('now', '-1 hour') -- Filter for the last 24 hours
-GROUP BY wm_class, wm_name
+SELECT wm_class, active_duration
+FROM wmclass AS w
+WHERE updated_at >= datetime('now', '-1 hour')
+  AND active_duration = (
+    SELECT MAX(active_duration)
+    FROM wmclass
+    WHERE wm_class = w.wm_class
+      AND updated_at >= datetime('now', '-1 hour')
+  )
 ORDER BY active_duration DESC;

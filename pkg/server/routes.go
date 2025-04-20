@@ -28,12 +28,12 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	// window events handler
 	r.HandleFunc("/window/all", h.ListAllWindowEvents(s.dbQueries)).Methods("GET")
-	r.HandleFunc("/window/1hr", h.ListWindowPastHour(s.dbQueries)).Methods("GET")
-	r.HandleFunc("/window/1day", h.ListWindowPastDay(s.dbQueries)).Methods("GET")
-	r.HandleFunc("/window/1day/active/top", h.TopWinLastDayActive(s.dbQueries)).Methods("GET")
-	r.HandleFunc("/window/1hr/active/top", h.TopWinLastHourActive(s.dbQueries)).Methods("GET")
-	r.HandleFunc("/window/1day/top", h.TopWinLastDay(s.dbQueries)).Methods("GET")
-	r.HandleFunc("/window/1hr/top", h.TopWinLastHour(s.dbQueries)).Methods("GET")
+	r.HandleFunc("/window/1hr", h.ListWindowPastHour(s.dbQueries)).Methods("GET")              // gives you result of each window title
+	r.HandleFunc("/window/1day", h.ListWindowPastDay(s.dbQueries)).Methods("GET")              // gives you result of each window title
+	r.HandleFunc("/window/1day/active/top", h.TopWinLastDayActive(s.dbQueries)).Methods("GET") // also gives you the grouped result of app (active duration)
+	r.HandleFunc("/window/1hr/active/top", h.TopWinLastHourActive(s.dbQueries)).Methods("GET") // also gives you the grouped result of app (active duration)
+	r.HandleFunc("/window/1day/top", h.TopWinLastDay(s.dbQueries)).Methods("GET")              // gives you result of each window title (active duration)
+	r.HandleFunc("/window/1hr/top", h.TopWinLastHour(s.dbQueries)).Methods("GET")              // gives you result of each window title (active duration)
 
 	return r
 }
