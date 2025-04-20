@@ -36,20 +36,18 @@ ORDER BY duration DESC;
 SELECT *
 FROM wmclass
 WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
-GROUP BY wm_class, wm_name
-ORDER BY duration DESC;
+ORDER BY active_duration DESC;
 
 -- name: TopDurationWinLastHour :many
 SELECT *
 FROM wmclass
-WHERE updated_at >= datetime('now', '-1 hour') -- Filter for the last 24 hours
-GROUP BY wm_class
-ORDER BY duration DESC;
+WHERE updated_at >= datetime('now', '-1 hour')
+ORDER BY active_duration DESC;
 
 -- name: TopActiveDurationWinLastDay :many
 SELECT wm_class, active_duration
 FROM wmclass AS w
-WHERE updated_at >= datetime('now', '-1 day')
+WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
   AND active_duration = (
     SELECT MAX(active_duration)
     FROM wmclass

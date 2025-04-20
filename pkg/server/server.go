@@ -115,6 +115,12 @@ func captureWindowData(dbQueries *database.Queries) {
 				if err == nil {
 					previousUpdate := windw.UpdatedAt
 					duration := int64(time.Since(previousUpdate).Seconds())
+					// check if duration is greater than 30 secs if it is skip it
+					// because we check the windows every 12 seconds so 30 or more could mean the window is dead
+					// so we should skip this entry
+					if duration > int64(30) {
+						duration = 0
+					}
 					Duration = duration + windw.Duration
 
 					if window.IsActive {
