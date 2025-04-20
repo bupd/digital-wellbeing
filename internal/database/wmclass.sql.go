@@ -222,35 +222,35 @@ func (q *Queries) ListWinByWmClass(ctx context.Context, wmClass string) ([]Wmcla
 	return items, nil
 }
 
-const topWinLastDay = `-- name: TopWinLastDay :many
-
-SELECT wm_class, wm_name, COUNT(*) as event_count
+const topActiveDurationWinLastDay = `-- name: TopActiveDurationWinLastDay :many
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
 WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
 GROUP BY wm_class, wm_name
-ORDER BY event_count DESC
+ORDER BY active_duration DESC
 `
 
-type TopWinLastDayRow struct {
-	WmClass    string
-	WmName     string
-	EventCount int64
-}
-
-// The below are leaving out because of the bugs in sqlc library
-// beware of bug: >sqlc generate
-// # package
-// sql/queries/wmclass.sql:1:1: duplicate query name: AddWmClass
-func (q *Queries) TopWinLastDay(ctx context.Context) ([]TopWinLastDayRow, error) {
-	rows, err := q.db.QueryContext(ctx, topWinLastDay)
+func (q *Queries) TopActiveDurationWinLastDay(ctx context.Context) ([]Wmclass, error) {
+	rows, err := q.db.QueryContext(ctx, topActiveDurationWinLastDay)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []TopWinLastDayRow
+	var items []Wmclass
 	for rows.Next() {
-		var i TopWinLastDayRow
-		if err := rows.Scan(&i.WmClass, &i.WmName, &i.EventCount); err != nil {
+		var i Wmclass
+		if err := rows.Scan(
+			&i.ID,
+			&i.WmClass,
+			&i.WmName,
+			&i.StartTime,
+			&i.EndTime,
+			&i.Duration,
+			&i.ActiveDuration,
+			&i.IsActive,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -264,30 +264,124 @@ func (q *Queries) TopWinLastDay(ctx context.Context) ([]TopWinLastDayRow, error)
 	return items, nil
 }
 
-const topWinLastHour = `-- name: TopWinLastHour :many
-SELECT wm_class, wm_name, COUNT(*) as event_count
+const topActiveDurationWinLastHour = `-- name: TopActiveDurationWinLastHour :many
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
 FROM wmclass
 WHERE start_time >= datetime('now', '-1 hour') -- Filter for the last 24 hours
-GROUP BY wm_class
-ORDER BY event_count DESC
+GROUP BY wm_class, wm_name
+ORDER BY active_duration DESC
 `
 
-type TopWinLastHourRow struct {
-	WmClass    string
-	WmName     string
-	EventCount int64
-}
-
-func (q *Queries) TopWinLastHour(ctx context.Context) ([]TopWinLastHourRow, error) {
-	rows, err := q.db.QueryContext(ctx, topWinLastHour)
+func (q *Queries) TopActiveDurationWinLastHour(ctx context.Context) ([]Wmclass, error) {
+	rows, err := q.db.QueryContext(ctx, topActiveDurationWinLastHour)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []TopWinLastHourRow
+	var items []Wmclass
 	for rows.Next() {
-		var i TopWinLastHourRow
-		if err := rows.Scan(&i.WmClass, &i.WmName, &i.EventCount); err != nil {
+		var i Wmclass
+		if err := rows.Scan(
+			&i.ID,
+			&i.WmClass,
+			&i.WmName,
+			&i.StartTime,
+			&i.EndTime,
+			&i.Duration,
+			&i.ActiveDuration,
+			&i.IsActive,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const topDurationWinLastDay = `-- name: TopDurationWinLastDay :many
+
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
+FROM wmclass
+WHERE updated_at >= datetime('now', '-1 day') -- Filter for the last 24 hours
+GROUP BY wm_class, wm_name
+ORDER BY duration DESC
+`
+
+// The below are leaving out because of the bugs in sqlc library
+// beware of bug: >sqlc generate
+// # package
+// sql/queries/wmclass.sql:1:1: duplicate query name: AddWmClass
+func (q *Queries) TopDurationWinLastDay(ctx context.Context) ([]Wmclass, error) {
+	rows, err := q.db.QueryContext(ctx, topDurationWinLastDay)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Wmclass
+	for rows.Next() {
+		var i Wmclass
+		if err := rows.Scan(
+			&i.ID,
+			&i.WmClass,
+			&i.WmName,
+			&i.StartTime,
+			&i.EndTime,
+			&i.Duration,
+			&i.ActiveDuration,
+			&i.IsActive,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const topDurationWinLastHour = `-- name: TopDurationWinLastHour :many
+SELECT id, wm_class, wm_name, start_time, end_time, duration, active_duration, is_active, created_at, updated_at
+FROM wmclass
+WHERE start_time >= datetime('now', '-1 hour') -- Filter for the last 24 hours
+GROUP BY wm_class, wm_name
+ORDER BY duration DESC
+`
+
+func (q *Queries) TopDurationWinLastHour(ctx context.Context) ([]Wmclass, error) {
+	rows, err := q.db.QueryContext(ctx, topDurationWinLastHour)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Wmclass
+	for rows.Next() {
+		var i Wmclass
+		if err := rows.Scan(
+			&i.ID,
+			&i.WmClass,
+			&i.WmName,
+			&i.StartTime,
+			&i.EndTime,
+			&i.Duration,
+			&i.ActiveDuration,
+			&i.IsActive,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
