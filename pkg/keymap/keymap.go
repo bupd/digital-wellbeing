@@ -7,6 +7,8 @@ func GetKeyName(keychar uint16) string {
 	switch keychar {
 	case 32:
 		return "Space"
+	case 47:
+		return "/"
 	case 48:
 		return "0"
 	case 49:
@@ -27,6 +29,8 @@ func GetKeyName(keychar uint16) string {
 		return "8"
 	case 57:
 		return "9"
+	case 58:
+		return ":"
 	case 65:
 		return "A"
 	case 66:
