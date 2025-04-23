@@ -13,7 +13,7 @@ import (
 )
 
 // version can be set via -ldflags="-X main.version=1.0.3"
-var version = "dev" // ⬅️ default version
+var version = "0.0.4"
 
 func main() {
 	// define a --version flag
