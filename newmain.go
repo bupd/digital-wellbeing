@@ -15,7 +15,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/bupd/digital-wellbeing/internal/database"
-	"github.com/bupd/digital-wellbeing/utils"
 )
 
 var loggerLevels = map[string]slog.Level{
@@ -32,8 +31,6 @@ func run() error {
 		slog.Error(fmt.Sprintf("Cannot find user home dir: %v", err))
 		return err
 	}
-
-	utils.CheckIfDBExists(home)
 
 	db, err := sql.Open("sqlite3", filepath.Join(home, ".digital-wellbeing/data.db"))
 	if err != nil {
