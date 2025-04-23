@@ -1,8 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/bupd/digital-wellbeing/pkg/config"
@@ -10,7 +12,20 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 )
 
+// version can be set via -ldflags="-X main.version=1.0.3"
+var version = "dev" // ⬅️ default version
+
 func main() {
+	// define a --version flag
+	showVersion := flag.Bool("version", false, "Print the version and exit")
+	flag.Parse()
+
+	// check if --version was passed
+	if *showVersion {
+		fmt.Println("Digital Wellbeing Version:", version)
+		os.Exit(0)
+	}
+
 	conf := config.GetConfig()
 	port := conf.PORT
 	dbName := conf.DBNAME
