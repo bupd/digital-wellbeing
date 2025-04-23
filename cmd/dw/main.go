@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/bupd/digital-wellbeing/pkg/config"
-	"github.com/bupd/digital-wellbeing/pkg/migrator"
 	"github.com/bupd/digital-wellbeing/pkg/server"
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -44,12 +43,6 @@ func main() {
 		// Format: weekly-YYYY-week-WW
 		dbName = fmt.Sprintf("%d-week-%02d", year, week)
 		fmt.Println("Updated dbName to:", dbName)
-	}
-
-  // ✅ Run DB migrations before starting the server
-	err = migrator.RunMigrations()
-	if err != nil {
-		log.Fatalf("Migration failed: %v", err)
 	}
 
 	server := server.NewServer(port, dbName)

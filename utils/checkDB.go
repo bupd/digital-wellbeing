@@ -9,8 +9,8 @@ import (
 )
 
 // Check if db exists, if not create one
-func CheckIfDBExists(home string) {
-	dbPath := filepath.Join(home, ".digital-wellbeing/data.db")
+func CheckIfDBExists(DBname, home string) {
+	dbPath := filepath.Join(home, ".digital-wellbeing/"+DBname+".db")
 
 	// Check if the database file exists
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
