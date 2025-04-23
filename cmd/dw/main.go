@@ -16,6 +16,7 @@ import (
 var version = "0.0.4"
 
 func main() {
+	var err error
 	// define a --version flag
 	showVersion := flag.Bool("version", false, "Print the version and exit")
 	flag.Parse()
@@ -33,7 +34,7 @@ func main() {
 	// update new db daily
 	if dbName == "daily" || len(dbName) == 0 {
 		// Format: daily-YYYY-MM-DD
-		today := time.Now().Format("2006-01-28") // user-friendly format
+		today := time.Now().Format("2006-Jan-02") // user-friendly format
 		dbName = today
 		fmt.Println("Updated dbName to:", dbName)
 	} else if dbName == "weekly" {
@@ -47,7 +48,7 @@ func main() {
 	server := server.NewServer(port, dbName)
 
 	fmt.Printf("\nDigital Wellbeing running on server: %s\n", server.Addr)
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		log.Fatalf("cannot start server: %s", err)
 	}

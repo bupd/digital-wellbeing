@@ -16,6 +16,7 @@ import (
 
 	"github.com/bupd/digital-wellbeing/internal/database"
 	"github.com/bupd/digital-wellbeing/pkg/events"
+	"github.com/bupd/digital-wellbeing/pkg/migrator"
 	"github.com/bupd/digital-wellbeing/pkg/retry"
 	"github.com/bupd/digital-wellbeing/utils"
 	"github.com/rs/cors"
@@ -33,7 +34,6 @@ type Server struct {
 }
 
 var (
-	dbName   = os.Getenv("DB_DATABASE")
 	password = os.Getenv("DB_PASSWORD")
 	username = os.Getenv("DB_USERNAME")
 	PORT     = os.Getenv("DB_PORT")
@@ -47,6 +47,12 @@ func NewServer(PORT, DBName string) *http.Server {
 	// for ev := range chanHook {
 	// 	fmt.Printf("hook: %v\n", ev)
 	// }
+
+  // Run DB migrations before starting the server
+	err := migrator.RunMigrations(DBName)
+	if err != nil {
+		log.Fatalf("Migration failed: %v", err)
+	}
 
 	port, err := strconv.Atoi(PORT)
 	if err != nil {
