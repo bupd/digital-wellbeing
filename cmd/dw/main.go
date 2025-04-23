@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/bupd/digital-wellbeing/pkg/config"
+	"github.com/bupd/digital-wellbeing/pkg/migrator"
 	"github.com/bupd/digital-wellbeing/pkg/server"
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -16,6 +17,7 @@ import (
 var version = "0.0.4"
 
 func main() {
+	var err error
 	// define a --version flag
 	showVersion := flag.Bool("version", false, "Print the version and exit")
 	flag.Parse()
@@ -44,10 +46,16 @@ func main() {
 		fmt.Println("Updated dbName to:", dbName)
 	}
 
+  // ✅ Run DB migrations before starting the server
+	err = migrator.RunMigrations()
+	if err != nil {
+		log.Fatalf("Migration failed: %v", err)
+	}
+
 	server := server.NewServer(port, dbName)
 
 	fmt.Printf("\nDigital Wellbeing running on server: %s\n", server.Addr)
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		log.Fatalf("cannot start server: %s", err)
 	}
