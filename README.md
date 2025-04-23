@@ -10,11 +10,24 @@ Linux app more than Digital Wellbeing found in Androids.
 go install github.com/bupd/digital-wellbeing/cmd/dw@latest
 ```
 
-## Run 
+## Run
 ```shell
-export PORT="8888"
 dw
 ```
+
+## Config
+```toml
+# Default configuration for Digital Wellbeing
+# Add your configuration here
+PORT = "8888"
+# you can set to data for a single database
+# daily or weekly to use new database
+DBNAME = "daily" # will use a new DB for everyday
+```
+
+## Add DB Migrations
+I am still looking for a way on how to make the migrations on newly created DBs
+for now copy all files `sql/schema` and place it in `~/.digital-wellbeing/migrations/`
 
 ## Output
 
