@@ -33,7 +33,7 @@ func main() {
 	// update new db daily
 	if dbName == "daily" || len(dbName) == 0 {
 		// Format: daily-YYYY-MM-DD
-		today := time.Now().Format("2006-01-28") // user-friendly format
+		today := time.Now().Format("2006-Jan-02") // user-friendly format
 		dbName = today
 		fmt.Println("Updated dbName to:", dbName)
 	} else if dbName == "weekly" {
